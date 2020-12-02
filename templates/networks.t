@@ -1,5 +1,4 @@
-{{- $helmRepo := "ws-helm-charts" }}
-{{- $script := slice }}
+{{- $script := slice "helm repo add spacemesh https://spacemeshos.github.io/ws-helm-charts" }}
 
 {{- define "helm.yaml" -}}
 configFile: {{ .netID }}.conf
@@ -12,10 +11,10 @@ ingress:
 {{- $name := printf "sm-%s" .netID }}
 {{- $helmFile := printf "%s.yaml" $name }}
 {{- tmpl.Exec "helm.yaml" . | file.Write $helmFile }}
-{{- $cmd := printf "helm upgrade --install -f %s %s %s/spacemesh-api" $helmFile $name $helmRepo }}
+{{- $cmd := printf "helm upgrade --install -f %s %s spacemesh/spacemesh-api" $helmFile $name }}
 {{- $script = $script | append $cmd }}
 {{- end -}}
 
 {{- range $script -}}
 {{ . }}
-{{- end -}}
+{{ end -}}
