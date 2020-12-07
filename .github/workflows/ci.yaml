@@ -37,8 +37,9 @@ jobs:
         run: go get github.com/hairyhenderson/gomplate/cmd/gomplate
 
       - name: Make symlink to gomplate
-        run: echo $PATH
-        #run: ln -s ~/go/src/github.com/hairyhenderson/gomplate /usr/bin/gomplate
+        run: |
+          ln -s ~/go/src/github.com/hairyhenderson/gomplate \
+            /usr/local/bin/gomplate
 
       - name: Download configs
         run: |
