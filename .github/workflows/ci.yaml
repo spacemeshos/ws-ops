@@ -17,6 +17,7 @@ jobs:
       - name: Init gcloud
         env:
           CLUSTER_NAME: test
+          CLUSTER_ZONE: europe-west1-b
           PROJECT_NAME: web-services
         run: |
           echo "${{ secrets.GCLOUD_KEY }}" | base64 -d > key.json
