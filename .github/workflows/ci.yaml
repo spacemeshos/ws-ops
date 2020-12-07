@@ -28,4 +28,4 @@ jobs:
             --project ${{ env.PROJECT_NAME }}
 
       - name: Test
-        run: helm list
+        run: gomplate -h
