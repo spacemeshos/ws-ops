@@ -35,22 +35,3 @@ jobs:
       - name: Install gomplate
         if: steps.cache.outputs.cache-hit != 'true'
         run: go get github.com/hairyhenderson/gomplate/cmd/gomplate
-
-      - name: Make symlink to gomplate
-        run: |
-          ln -s ~/go/src/github.com/hairyhenderson/gomplate \
-            /usr/local/bin/gomplate
-
-      - name: Download configs
-        run: |
-          gomplate \
-            -f templates/download-configs.t \
-            -d networks=networks.json \
-            --exec-pipe -- bash
-
-      - name: Deploy helms
-        run: |
-          gomplate \
-            -f templates/download-configs.t \
-            -d networks=networks.json \
-            --exec-pipe -- bash
