@@ -11,8 +11,7 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v2
+      - uses: actions/checkout@v2
 
       - name: Init gcloud
         env:
@@ -27,8 +26,29 @@ jobs:
             --zone ${{ env.CLUSTER_ZONE }} \
             --project ${{ env.PROJECT_NAME }}
 
+      - uses: actions/cache@v2
+        id: cache
+        with:
+          path: ~/go
+          key: v3.8.0
+
       - name: Install gomplate
+        if: steps.cache.outputs.cache-hit != 'true'
         run: go get github.com/hairyhenderson/gomplate/cmd/gomplate
 
-      - name: Test
-        run: find / -name gomplate
+      - name: Make symlink to gomplate
+        run: ln -s ~/go/src/github.com/hairyhenderson/gomplate /usr/bin/gomplate
+
+      - name: Download configs
+        run: |
+          gomplate \
+            -f templates/download-configs.t \
+            -d networks=networks.json \
+            --exec-pipe -- bash
+
+      - name: Deploy helms
+        run: |
+          gomplate \
+            -f templates/download-configs.t \
+            -d networks=networks.json \
+            --exec-pipe -- bash
