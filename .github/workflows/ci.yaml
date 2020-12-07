@@ -22,7 +22,9 @@ jobs:
         run: |
           echo "${{ secrets.GCLOUD_KEY }}" | base64 -d > key.json
           gcloud auth activate-service-account --key-file=key.json
-          gcloud container clusters get-credentials ${{ env.CLUSTER_NAME }} \
+          gcloud container clusters get-credentials \
+            ${{ env.CLUSTER_NAME }} \
+            --zone ${{ env.CLUSTER_ZONE }} \
             --project ${{ env.PROJECT_NAME }}
 
       - name: Test
