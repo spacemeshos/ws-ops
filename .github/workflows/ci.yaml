@@ -28,7 +28,7 @@ jobs:
             --project ${{ env.PROJECT_NAME }}
 
       - name: Install gomplate
-        run: go install github.com/hairyhenderson/gomplate/cmd/gomplate
+        run: go get github.com/hairyhenderson/gomplate/cmd/gomplate
 
       - name: Test
         run: find / -name gomplate
