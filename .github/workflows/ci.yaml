@@ -26,12 +26,20 @@ jobs:
             --zone ${{ env.CLUSTER_ZONE }} \
             --project ${{ env.PROJECT_NAME }}
 
-      - uses: actions/cache@v2
-        id: cache
-        with:
-          path: ~/go/bin
-          key: v3.8.0
-
       - name: Install gomplate
-        if: steps.cache.outputs.cache-hit != 'true'
-        run: go get github.com/hairyhenderson/gomplate/cmd/gomplate
+        run: |
+          curl -o gomplate https://github.com/hairyhenderson/gomplate/releases/download/v3.8.0/gomplate_linux-amd64
+
+      - name: Download configs
+        run: |
+          ./gomplate \
+            -f templates/download-configs.t \
+            -d networks=networks.json \
+            --exec-pipe -- bash
+
+      - name: Deploy helms
+        run: |
+          ./gomplate \
+            -f templates/download-configs.t \
+            -d networks=networks.json \
+            --exec-pipe -- bash
