@@ -1,0 +1,28 @@
+name: Deploy
+
+on: push
+
+#on:
+#  push:
+#    branches:
+#      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Init gcloud
+        env:
+          CLUSTER_NAME: test
+          PROJECT_NAME: web-services
+        run: |
+          echo "${{ secrets.GCLOUD_KEY }}" | base64 -d > key.json
+          gcloud auth activate-service-account --key-file=key.json
+          gcloud container clusters get-credentials ${{ env.CLUSTER_NAME }} \
+            --project ${{ env.PROJECT_NAME }}
+
+      - name: Test
+        run: helm list
