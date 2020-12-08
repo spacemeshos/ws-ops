@@ -28,7 +28,8 @@ jobs:
 
       - name: Install gomplate
         run: |
-          curl -o gomplate https://github.com/hairyhenderson/gomplate/releases/download/v3.8.0/gomplate_linux-amd64
+          curl -sSL -o gomplate https://github.com/hairyhenderson/gomplate/releases/download/v3.8.0/gomplate_linux-amd64
+          chmod +x gomplate
 
       - name: Download configs
         run: |
