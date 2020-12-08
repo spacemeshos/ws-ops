@@ -36,11 +36,9 @@ jobs:
           ./gomplate \
             -f templates/download-configs.t \
             -d networks=networks.json \
-            --exec-pipe -- bash
 
       - name: Deploy helms
         run: |
           ./gomplate \
             -f templates/download-configs.t \
             -d networks=networks.json \
-            --exec-pipe -- bash
