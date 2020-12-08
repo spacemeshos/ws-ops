@@ -1,0 +1,44 @@
+name: Deploy
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Init gcloud
+        env:
+          CLUSTER_NAME: test
+          CLUSTER_ZONE: europe-west1-b
+          PROJECT_NAME: explore-293719
+        run: |
+          echo "${{ secrets.GCLOUD_KEY }}" | base64 -d > key.json
+          gcloud auth activate-service-account --key-file=key.json
+          gcloud container clusters get-credentials \
+            ${{ env.CLUSTER_NAME }} \
+            --zone ${{ env.CLUSTER_ZONE }} \
+            --project ${{ env.PROJECT_NAME }}
+
+      - name: Install gomplate
+        run: |
+          curl -sSL -o gomplate https://github.com/hairyhenderson/gomplate/releases/download/v3.8.0/gomplate_linux-amd64
+          chmod +x gomplate
+
+      - name: Download configs
+        run: |
+          ./gomplate \
+            -f templates/download-configs.t \
+            -d networks=networks.json \
+            --exec-pipe -- bash
+
+      - name: Deploy helms
+        run: |
+          ./gomplate \
+            -f templates/networks.t \
+            -d networks=networks.json \
+            --exec-pipe -- bash
