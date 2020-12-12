@@ -9,7 +9,7 @@
     "explorer" : "https://explorer-122.spacemesh.io/",
     "dash" : "https://dash-122.spacemesh.io/",
     "minNodeVersion" : "0.1.17",
-    "maxNodeVersion" : "0.1.17",
+    "maxNodeVersion" : "0.1.19",
     "minSmappRelease": "0.1.12",
     "latestSmappRelease" : "0.1.13",
     "smappBaseDownloadUrl" : "https://downloads.spacemesh.io",

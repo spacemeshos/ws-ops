@@ -14,7 +14,7 @@ peers: |
 {{ end }}
 
 {{- range (datasource "networks") }}
-{{- $name := printf "sm-%s" .netID }}
+{{- $name := printf "api-%s" .netID }}
 {{- $helmFile := printf "%s.yaml" $name }}
 {{- $confData := .conf | base64.Encode | file.Read }}
 {{- $peersData := .peers | base64.Encode | file.Read }}
