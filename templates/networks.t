@@ -9,7 +9,7 @@ ingress:
   jsonRpcDomain: {{ .jsonAPI | strings.TrimPrefix "https://" | strings.TrimSuffix "/" }}
 resources:
   requests:
-    cpu: 1000m
+    cpu: 300m
     memory: 2.2Gi
 config: |
 {{ .confData | indent 2 }}
