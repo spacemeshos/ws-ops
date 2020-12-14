@@ -10,7 +10,7 @@ ingress:
 resources:
   requests:
     cpu: 300m
-    memory: 2.2Gi
+    memory: 4Gi
 config: |
 {{ .confData | indent 2 }}
 peers: |
