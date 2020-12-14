@@ -7,6 +7,10 @@ image:
 ingress:
   grpcDomain: {{ .grpcAPI | strings.TrimPrefix "https://" | strings.TrimSuffix "/" }}
   jsonRpcDomain: {{ .jsonAPI | strings.TrimPrefix "https://" | strings.TrimSuffix "/" }}
+resources:
+  requests:
+    cpu: 1000m
+    memory: 2.2Gi
 config: |
 {{ .confData | indent 2 }}
 peers: |
