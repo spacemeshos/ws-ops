@@ -36,9 +36,13 @@ jobs:
             -d networks=networks.json \
             --exec-pipe -- bash
 
+      - name: Get helm list
+        run: helm list -o json > helm-list.json
+
       - name: Deploy helms
         run: |
           ./gomplate \
             -f templates/networks.t \
             -d networks=networks.json \
+            -d helm=helm-list.json \
             --exec-pipe -- bash

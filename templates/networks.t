@@ -45,19 +45,20 @@ node:
 {{- range (datasource "networks") }}
 {{- $confData := .conf | base64.Encode | file.Read }}
 {{- $peersData := .peers | base64.Encode | file.Read }}
-{{- $addParams := dict "confData" $confData  "peersData" $peersData }}
+{{- $addParams := dict "confData" $confData  "peersData" $peersData -}}
 
-{{- $name := printf "api-%s" .netID }}
+{{- $name := printf "spacemesh-api-%s" .netID }}
 {{- $helmFile := printf "%s.yaml" $name }}
 {{- tmpl.Exec "api.yaml" (merge . $addParams) | file.Write $helmFile }}
 {{- $cmd := printf "helm upgrade --install -f %s %s spacemesh/spacemesh-api" $helmFile $name }}
-{{- $script = $script | append $cmd }}
+{{- $script = $script | append $cmd -}}
 
-{{- $name := printf "explorer-%s" .netID }}
+{{- $name := printf "spacemesh-explorer-%s" .netID }}
 {{- $helmFile := printf "%s.yaml" $name }}
 {{- tmpl.Exec "explorer.yaml" (merge . $addParams) | file.Write $helmFile }}
 {{- $cmd := printf "helm upgrade --install -f %s %s spacemesh/spacemesh-explorer" $helmFile $name }}
-{{- $script = $script | append $cmd }}
+{{- $script = $script | append $cmd -}}
+
 {{- end -}}
 
 {{- range $script -}}
