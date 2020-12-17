@@ -1,12 +1,14 @@
 {{- $script := slice "helm repo add spacemesh https://spacemeshos.github.io/ws-helm-charts" }}
 
 {{- define "api.yaml" -}}
+{{- $grpcURL := conv.URL .grpcAPI -}}
+{{- $jsonURL := conv.URL .jsonAPI -}}
 netID: {{ .netID }}
 image:
   tag: v{{ .maxNodeVersion }}
 ingress:
-  grpcDomain: {{ .grpcAPI | strings.TrimPrefix "https://" | strings.TrimSuffix "/" }}
-  jsonRpcDomain: {{ .jsonAPI | strings.TrimPrefix "https://" | strings.TrimSuffix "/" }}
+  grpcDomain: {{ $grpcURL.Host }}
+  jsonRpcDomain: {{ $jsonURL.Host }}
 resources:
   requests:
     cpu: 300m
@@ -18,12 +20,13 @@ peers: |
 {{ end }}
 
 {{- define "explorer.yaml" -}}
+{{- $url := conv.URL .explorerAPI -}}
 imageTag: github-actions
 apiServer:
   image:
     repository: valar999sm/explorer-apiserver
   ingress:
-    domain: {{ .explorerAPI | strings.TrimPrefix "https://" | strings.TrimSuffix "/" }}
+    domain: {{ $url.Host }}
 collector:
   image:
     repository: valar999sm/explorer-collector
