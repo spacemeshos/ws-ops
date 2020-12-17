@@ -21,15 +21,15 @@ peers: |
 
 {{- define "explorer.yaml" -}}
 {{- $url := conv.URL .explorerAPI -}}
-imageTag: github-actions
+imageTag: v{{ .explorerVersion }}
 apiServer:
   image:
-    repository: valar999sm/explorer-apiserver
+    repository: spacemeshos/explorer-apiserver
   ingress:
     domain: {{ $url.Host }}
 collector:
   image:
-    repository: valar999sm/explorer-collector
+    repository: spacemeshos/explorer-collector
   replicaCount: 2
 node:
   image:
