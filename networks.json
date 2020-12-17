@@ -11,7 +11,7 @@
     "explorerVersion": "0.0.2",
     "explorerConf": "https://discover.spacemesh.io/conf/20/explorer-config.json",
     "dash" : "https://dash-20.spacemesh.io/",
-    "dashAPI" : "wss://dash-api-20.spacemesh.io/",
+    "dashAPI" : "wss://dash-api-20.spacemesh.io/ws",
     "dashVersion": "0.0.2",
     "minNodeVersion" : "0.1.17",
     "maxNodeVersion" : "0.1.17",
