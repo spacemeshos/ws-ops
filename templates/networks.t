@@ -45,6 +45,16 @@ node:
 {{ .peersData | indent 4 }}
 {{ end }}
 
+{{- define "dash.yaml" -}}
+{{- $url := conv.URL .dashAPI -}}
+image:
+  repository: spacemeshos/dash-backend
+  tag: v{{ .dashVersion }}
+mongo: mongodb://spacemesh-explorer-{{ .netID }}-mongo
+ingress:
+  domain: {{ $url.Host }}
+{{ end }}
+
 {{- range (datasource "networks") }}
 {{- $confData := .conf | base64.Encode | file.Read }}
 {{- $confExplorerData := .explorerConf | base64.Encode | file.Read }}
@@ -61,6 +71,12 @@ node:
 {{- $helmFile := printf "%s.yaml" $name }}
 {{- tmpl.Exec "explorer.yaml" (merge . $addParams) | file.Write $helmFile }}
 {{- $cmd := printf "helm upgrade --install -f %s %s spacemesh/spacemesh-explorer" $helmFile $name }}
+{{- $script = $script | append $cmd -}}
+
+{{- $name := printf "spacemesh-dash-%s" .netID }}
+{{- $helmFile := printf "%s.yaml" $name }}
+{{- tmpl.Exec "dash.yaml" (merge . $addParams) | file.Write $helmFile }}
+{{- $cmd := printf "helm upgrade --install -f %s %s spacemesh/spacemesh-dash" $helmFile $name }}
 {{- $script = $script | append $cmd -}}
 
 {{- end -}}
