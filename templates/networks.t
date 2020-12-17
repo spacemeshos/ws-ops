@@ -23,7 +23,7 @@ apiServer:
   image:
     repository: valar999sm/explorer-apiserver
   ingress:
-    domain: {{ .explorer | strings.TrimPrefix "https://" | strings.TrimSuffix "/" }}
+    domain: {{ .explorerAPI | strings.TrimPrefix "https://" | strings.TrimSuffix "/" }}
 collector:
   image:
     repository: valar999sm/explorer-collector
