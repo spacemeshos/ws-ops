@@ -1,4 +1,4 @@
-{{- $script := slice "helm repo add spacemesh https://spacemeshos.github.io/ws-helm-charts" }}
+{{- $script := slice "set -e" "helm repo add spacemesh https://spacemeshos.github.io/ws-helm-charts" -}}
 
 {{- define "api.yaml" -}}
 {{- $grpcURL := conv.URL .grpcAPI -}}
