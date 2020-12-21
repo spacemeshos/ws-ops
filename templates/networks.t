@@ -23,13 +23,9 @@ peers: |
 {{- $url := conv.URL .explorerAPI -}}
 imageTag: v{{ .explorerVersion }}
 apiServer:
-  image:
-    repository: spacemeshos/explorer-apiserver
   ingress:
     domain: {{ $url.Host }}
 collector:
-  image:
-    repository: spacemeshos/explorer-collector
   replicaCount: 2
 node:
   image:
@@ -48,7 +44,6 @@ node:
 {{- define "dash.yaml" -}}
 {{- $url := conv.URL .dashAPI -}}
 image:
-  repository: spacemeshos/dash-backend
   tag: v{{ .dashVersion }}
 mongo: mongodb://spacemesh-explorer-{{ .netID }}-mongo
 ingress:
