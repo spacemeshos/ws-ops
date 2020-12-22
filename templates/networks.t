@@ -1,5 +1,6 @@
 {{- $script := slice "set -e" "helm repo add spacemesh https://spacemeshos.github.io/ws-helm-charts" -}}
 
+{{- /* Values template for spacemesh-api */ -}}
 {{- define "api.yaml" -}}
 {{- $grpcURL := conv.URL .grpcAPI -}}
 {{- $jsonURL := conv.URL .jsonAPI -}}
@@ -19,6 +20,7 @@ peers: |
 {{ .peersData | indent 2 }}
 {{ end }}
 
+{{- /* Values template for spacemesh-explorer */ -}}
 {{- define "explorer.yaml" -}}
 {{- $url := conv.URL .explorerAPI -}}
 imageTag: v{{ .explorerVersion }}
@@ -41,6 +43,7 @@ node:
 {{ .peersData | indent 4 }}
 {{ end }}
 
+{{- /* Values template for spacemesh-dash */ -}}
 {{- define "dash.yaml" -}}
 {{- $url := conv.URL .dashAPI -}}
 image:
@@ -50,6 +53,7 @@ ingress:
   domain: {{ $url.Host }}
 {{ end }}
 
+{{- /* Main loop through networks */ -}}
 {{- range (datasource "networks") }}
 {{- $confData := .conf | base64.Encode | file.Read }}
 {{- $confExplorerData := .explorerConf | base64.Encode | file.Read }}
