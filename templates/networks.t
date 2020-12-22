@@ -54,7 +54,9 @@ ingress:
 {{ end }}
 
 {{- /* Main loop through networks */ -}}
+{{- $nets := slice }}
 {{- range (datasource "networks") }}
+{{- $nets = $nets | append .netID }}
 {{- $confData := .conf | base64.Encode | file.Read }}
 {{- $confExplorerData := .explorerConf | base64.Encode | file.Read }}
 {{- $peersData := .peers | base64.Encode | file.Read }}
@@ -80,6 +82,18 @@ ingress:
 
 {{- end -}}
 
+{{- /* Delete missing networks */ -}}
+{{ range (datasource "helms") }}
+{{- if strings.HasPrefix "spacemesh-" .name }}
+{{- $d := splitN .name "-" 3 }}
+{{- if not (has $nets (index $d 2)) }}
+{{- $cmd := printf "helm uninstall %s" .name }}
+{{- $script = $script | append $cmd -}}
+{{- end }}
+{{- end }}
+{{- end }}
+
+{{- /* Output the script */ -}}
 {{- range $script -}}
 {{ . }}
 {{ end -}}

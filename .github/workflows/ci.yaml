@@ -44,5 +44,5 @@ jobs:
           ./gomplate \
             -f templates/networks.t \
             -d networks=networks.json \
-            -d helm=helm-list.json \
+            -d helms=helm-list.json \
             --exec-pipe -- bash
