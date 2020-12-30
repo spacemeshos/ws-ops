@@ -7,8 +7,11 @@ on: [push]
 #      - main
 
 jobs:
-  deploy:
+  terraform:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: terraform
     steps:
       - uses: actions/checkout@v2
 
@@ -18,4 +21,42 @@ jobs:
           location: europe-west1-b
           credentials: ${{ secrets.gcp_credentials }}
 
-      - run: kubectl cluster-info
+      - uses: hashicorp/setup-terraform@v1
+        with:
+          cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
+
+      - run: terraform fmt -check
+      - run: terraform plan
+
+#  deploy:
+#    runs-on: ubuntu-latest
+#      - uses: actions/checkout@v2
+#
+#      - uses: google-github-actions/get-gke-credentials@main
+#        with:
+#          cluster_name: test
+#          location: europe-west1-b
+#          credentials: ${{ secrets.gcp_credentials }}
+#
+#      - name: Get helm list
+#        run: helm list -o json > helm-list.json
+#
+#      - name: Install gomplate
+#        run: |
+#          curl -sSL -o gomplate https://github.com/hairyhenderson/gomplate/releases/download/v3.8.0/gomplate_linux-amd64
+#          chmod +x gomplate
+#
+#      - name: Download configs
+#        run: |
+#          ./gomplate \
+#            -f templates/download-configs.t \
+#            -d networks=networks.json \
+#            --exec-pipe -- bash
+#
+#      - name: Deploy helms
+#        run: |
+#          ./gomplate \
+#            -f templates/networks.t \
+#            -d networks=networks.json \
+#            -d helms=helm-list.json \
+#            --exec-pipe -- bash
