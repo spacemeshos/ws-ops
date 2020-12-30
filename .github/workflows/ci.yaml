@@ -4,25 +4,74 @@ on:
   push:
     branches:
       - main
+  pull_request:
+    branches:
+      - main
 
 jobs:
-  deploy:
+  terraform:
     runs-on: ubuntu-latest
+    env:
+      PAGERDUTY_TOKEN: ${{ secrets.PAGERDUTY_TOKEN }}
     steps:
       - uses: actions/checkout@v2
 
-      - name: Init gcloud
-        env:
-          CLUSTER_NAME: test
-          CLUSTER_ZONE: europe-west1-b
-          PROJECT_NAME: explore-293719
-        run: |
-          echo "${{ secrets.GCLOUD_KEY }}" | base64 -d > key.json
-          gcloud auth activate-service-account --key-file=key.json
-          gcloud container clusters get-credentials \
-            ${{ env.CLUSTER_NAME }} \
-            --zone ${{ env.CLUSTER_ZONE }} \
-            --project ${{ env.PROJECT_NAME }}
+      - uses: google-github-actions/setup-gcloud@master
+        with:
+          project_id: ${{ secrets.GCP_PROJECT }}
+          service_account_key: ${{ secrets.GCP_SA_KEY }}
+          export_default_credentials: true
+
+      - uses: google-github-actions/get-gke-credentials@main
+        with:
+          cluster_name: test
+          location: europe-west1-b
+
+      - uses: hashicorp/setup-terraform@v1
+        with:
+          cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
+
+      - run: cd terraform; terraform fmt -check
+
+      - run: cd terraform; terraform init
+
+      - name: Terraform Plan
+        run: cd terraform; terraform plan -input=false
+        if: github.event_name == 'pull_request'
+        id: plan
+        continue-on-error: true
+
+      - name: Update Pull Request
+        uses: actions/github-script@v3
+        if: github.event_name == 'pull_request'
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const output = `#### Terraform Plan 📖\`${{ steps.plan.outcome }}\`
+              <details><summary>Show Plan</summary>
+              \`\`\`${{ steps.plan.outputs.stdout }}\`\`\`
+              </details>
+              *Pusher: @${{ github.actor }},
+              Action: \`${{ github.event_name }}\`*`;
+              
+            github.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: output
+            })
+
+      - name: Terraform Plan Status
+        run: exit 1
+        if: steps.plan.outcome == 'failure'
+
+      - run: cd terraform; terraform apply -auto-approve
+        if: github.ref == 'refs/heads/master' && github.event_name == 'push'
+
+      - run: cd terraform; terraform output -json > ../terraform.json
+
+      - name: Get helm list
+        run: helm list -o json > helm-list.json
 
       - name: Install gomplate
         run: |
@@ -36,13 +85,12 @@ jobs:
             -d networks=networks.json \
             --exec-pipe -- bash
 
-      - name: Get helm list
-        run: helm list -o json > helm-list.json
-
       - name: Deploy helms
+        if: github.ref == 'refs/heads/master' && github.event_name == 'push'
         run: |
           ./gomplate \
             -f templates/networks.t \
             -d networks=networks.json \
             -d helms=helm-list.json \
+            -d terraform=terraform.json \
             --exec-pipe -- bash

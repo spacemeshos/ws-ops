@@ -7,6 +7,7 @@
 netID: {{ .netID }}
 image:
   tag: v{{ .maxNodeVersion }}
+pagerdutyToken: {{ .pagerdutyToken }}
 ingress:
   grpcDomain: {{ $grpcURL.Host }}
   jsonRpcDomain: {{ $jsonURL.Host }}
@@ -24,6 +25,7 @@ peers: |
 {{- define "explorer.yaml" -}}
 {{- $url := conv.URL .explorerAPI -}}
 imageTag: v{{ .explorerVersion }}
+pagerdutyToken: {{ .pagerdutyToken }}
 apiServer:
   ingress:
     domain: {{ $url.Host }}
@@ -48,35 +50,43 @@ node:
 {{- $url := conv.URL .dashAPI -}}
 image:
   tag: v{{ .dashVersion }}
+pagerdutyToken: {{ .pagerdutyToken }}
 mongo: mongodb://spacemesh-explorer-{{ .netID }}-mongo
 ingress:
   domain: {{ $url.Host }}
 {{ end }}
 
-{{- /* Main loop through networks */ -}}
 {{- $nets := slice }}
-{{- range (datasource "networks") }}
-{{- $nets = $nets | append .netID }}
-{{- $confData := .conf | base64.Encode | file.Read }}
-{{- $confExplorerData := .explorerConf | base64.Encode | file.Read }}
-{{- $peersData := .peers | base64.Encode | file.Read }}
+{{- $terraform := (datasource "terraform") }}
+{{- /* Main loop through networks */ -}}
+{{- range $i, $item := (datasource "networks") }}
+{{- $nets = $nets | append $item.netID }}
+{{- $confData := $item.conf | base64.Encode | file.Read }}
+{{- $confExplorerData := $item.explorerConf | base64.Encode | file.Read }}
+{{- $peersData := $item.peers | base64.Encode | file.Read }}
 {{- $addParams := dict "confData" $confData "confExplorerData" $confExplorerData "peersData" $peersData -}}
 
-{{- $name := printf "spacemesh-api-%s" .netID }}
+{{- $name := printf "spacemesh-api-%s" $item.netID }}
+{{- $pagerdutyToken := index $terraform.pagerduty_api_key.value $i }}
+{{- $params := (merge $item $addParams (dict "pagerdutyToken" $pagerdutyToken)) }}
 {{- $helmFile := printf "%s.yaml" $name }}
-{{- tmpl.Exec "api.yaml" (merge . $addParams) | file.Write $helmFile }}
+{{- tmpl.Exec "api.yaml" $params | file.Write $helmFile }}
 {{- $cmd := printf "helm upgrade --install -f %s %s spacemesh/spacemesh-api" $helmFile $name }}
 {{- $script = $script | append $cmd -}}
 
-{{- $name := printf "spacemesh-explorer-%s" .netID }}
+{{- $name := printf "spacemesh-explorer-%s" $item.netID }}
+{{- $pagerdutyToken := index $terraform.pagerduty_explorer_key.value $i }}
+{{- $params := (merge $item $addParams (dict "pagerdutyToken" $pagerdutyToken)) }}
 {{- $helmFile := printf "%s.yaml" $name }}
-{{- tmpl.Exec "explorer.yaml" (merge . $addParams) | file.Write $helmFile }}
+{{- tmpl.Exec "explorer.yaml" $params | file.Write $helmFile }}
 {{- $cmd := printf "helm upgrade --install -f %s %s spacemesh/spacemesh-explorer" $helmFile $name }}
 {{- $script = $script | append $cmd -}}
 
-{{- $name := printf "spacemesh-dash-%s" .netID }}
+{{- $name := printf "spacemesh-dash-%s" $item.netID }}
+{{- $pagerdutyToken := index $terraform.pagerduty_dash_key.value $i }}
+{{- $params := (merge $item $addParams (dict "pagerdutyToken" $pagerdutyToken)) }}
 {{- $helmFile := printf "%s.yaml" $name }}
-{{- tmpl.Exec "dash.yaml" (merge . $addParams) | file.Write $helmFile }}
+{{- tmpl.Exec "dash.yaml" $params | file.Write $helmFile }}
 {{- $cmd := printf "helm upgrade --install -f %s %s spacemesh/spacemesh-dash" $helmFile $name }}
 {{- $script = $script | append $cmd -}}
 
