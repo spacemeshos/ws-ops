@@ -5,6 +5,9 @@ provider "google" {
 provider "pagerduty" {
 }
 
+provider "statuspage" {
+}
+
 terraform {
   backend "remote" {
     organization = "spacemeshos"
