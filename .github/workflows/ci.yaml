@@ -76,7 +76,9 @@ jobs:
       - run: cd terraform; terraform apply -auto-approve
         if: github.ref == 'refs/heads/main'
 
-      - run: cd terraform; terraform output -json > ../terraform.json
+      - name: Terraform Save Output
+        run: cd terraform; terraform output -json > ../terraform.json
+        id: terraform_output
 
       - name: Get helm list
         run: helm list -o json > helm-list.json
@@ -94,8 +96,9 @@ jobs:
             --exec-pipe -- bash
 
       - name: Deploy helms
-        if: github.ref == 'refs/heads/main'
+        # if: github.ref == 'refs/heads/main'
         run: |
+          echo ${{ steps.terraform_output.outputs.stdout }} > terraform.json
           ./gomplate \
             -f templates/networks.t \
             -d networks=networks.json \
