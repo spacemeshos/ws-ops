@@ -47,6 +47,7 @@ jobs:
             \`\`\`
             `;
               
+            console.log(context.pull_request);
             if (context.pull_request) {
               github.issues.createComment({
                 issue_number: context.pull_request.number,
