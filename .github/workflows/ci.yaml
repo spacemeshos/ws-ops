@@ -5,8 +5,9 @@ on:
     branches:
       - main
   pull_request:
-    branches:
-      - main
+    types:
+      - opened
+      - synchronize
 
 jobs:
   terraform:
@@ -31,42 +32,49 @@ jobs:
         with:
           cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
 
-      - run: cd terraform; terraform fmt -check
+      - name: Terraform Fmt
+        run: cd terraform; terraform fmt -check
 
-      - run: cd terraform; terraform init
+      - name: Terraform Init
+        run: cd terraform; terraform init
 
       - name: Terraform Plan
-        run: cd terraform; terraform plan -input=false
-        if: github.event_name == 'pull_request'
+        run: cd terraform; terraform plan -input=false -no-color
         id: plan
         continue-on-error: true
 
       - name: Update Pull Request
         uses: actions/github-script@v3
-        if: github.event_name == 'pull_request'
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
-            const output = `#### Terraform Plan 📖\`${{ steps.plan.outcome }}\`
-              <details><summary>Show Plan</summary>
-              \`\`\`${{ steps.plan.outputs.stdout }}\`\`\`
-              </details>
-              *Pusher: @${{ github.actor }},
-              Action: \`${{ github.event_name }}\`*`;
+            const output = `#### Terraform Plan 📖 ${{ steps.plan.outcome }}
+            \`\`\`
+            ${{ steps.plan.outputs.stdout }}
+            \`\`\`
+            `;
               
-            github.issues.createComment({
-              issue_number: context.issue.number,
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              body: output
-            })
+            var id;
+            if (context.pull_request) {
+              id = context.pull_request.number;
+            } else if (context.payload.pull_request) {
+              id = context.payload.pull_request.number;
+            }
+            if (id) {
+              github.issues.createComment({
+                issue_number: id,
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                body: output
+              });
+            }
 
       - name: Terraform Plan Status
         run: exit 1
         if: steps.plan.outcome == 'failure'
 
       - run: cd terraform; terraform apply -auto-approve
-        if: github.ref == 'refs/heads/master' && github.event_name == 'push'
+        if: github.ref == 'refs/heads/master'
 
       - run: cd terraform; terraform output -json > ../terraform.json
 
@@ -86,7 +94,7 @@ jobs:
             --exec-pipe -- bash
 
       - name: Deploy helms
-        if: github.ref == 'refs/heads/master' && github.event_name == 'push'
+        if: github.ref == 'refs/heads/master'
         run: |
           ./gomplate \
             -f templates/networks.t \
