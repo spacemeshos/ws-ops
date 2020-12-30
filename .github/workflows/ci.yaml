@@ -1,12 +1,6 @@
 name: Deploy
 
-on:
-  push:
-    branches:
-      - main
-  pull_request:
-    branches:
-      - main
+on: push
 
 jobs:
   terraform:
@@ -48,14 +42,30 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
-            console.log(context);
+            const output = `#### Terraform Plan 📖 ${{ steps.plan.outcome }}
+              <details>
+                <summary>Show Plan</summary>
+                \`\`\`
+                ${{ steps.plan.outputs.stdout }}
+                \`\`\`
+              </details>
+            `;
+              
+            if (context.pull_request) {
+              github.issues.createComment({
+                issue_number: context.pull_request.number,
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                body: output
+              });
+            }
 
       - name: Terraform Plan Status
         run: exit 1
         if: steps.plan.outcome == 'failure'
 
       - run: cd terraform; terraform apply -auto-approve
-        if: github.ref == 'refs/heads/master' && github.event_name == 'push'
+        if: github.ref == 'refs/heads/master'
 
       - run: cd terraform; terraform output -json > ../terraform.json
 
@@ -75,7 +85,7 @@ jobs:
             --exec-pipe -- bash
 
       - name: Deploy helms
-        if: github.ref == 'refs/heads/master' && github.event_name == 'push'
+        if: github.ref == 'refs/heads/master'
         run: |
           ./gomplate \
             -f templates/networks.t \
