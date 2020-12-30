@@ -61,7 +61,7 @@ resource "google_compute_url_map" "main" {
   default_service = google_compute_backend_bucket.explorer.id
 
   host_rule {
-    hosts        = [
+    hosts = [
       for network in local.networks :
       "explorer-${network.netID}.spacemesh.io"
     ]
@@ -69,7 +69,7 @@ resource "google_compute_url_map" "main" {
   }
 
   host_rule {
-    hosts        = [
+    hosts = [
       for network in local.networks :
       "dash-${network.netID}.spacemesh.io"
     ]
