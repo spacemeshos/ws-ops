@@ -45,25 +45,10 @@ jobs:
 
       - name: Update Pull Request
         uses: actions/github-script@v3
-        if: github.event_name == 'pull_request'
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
-            const output = `#### Terraform Plan 📖 ${{ steps.plan.outcome }}
-              <details>
-                <summary>Show Plan</summary>
-                \`\`\`
-                ${{ steps.plan.outputs.stdout }}
-                \`\`\`
-              </details>
-            `;
-              
-            github.issues.createComment({
-              issue_number: context.issue.number,
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              body: output
-            })
+            console.log(context);
 
       - name: Terraform Plan Status
         run: exit 1
