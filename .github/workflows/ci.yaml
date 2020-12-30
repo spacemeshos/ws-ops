@@ -1,6 +1,13 @@
 name: Deploy
 
-on: [push, pull_request]
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    types:
+      - opened
+      - synchronize
 
 jobs:
   terraform:
@@ -47,7 +54,7 @@ jobs:
             \`\`\`
             `;
               
-            console.log(context);
+            console.log(context.pull_request);
             if (context.pull_request) {
               github.issues.createComment({
                 issue_number: context.pull_request.number,
