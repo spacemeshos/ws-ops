@@ -99,7 +99,9 @@ jobs:
       - name: Deploy helms
         # if: github.ref == 'refs/heads/main'
         run: |
-          echo ${{ steps.terraform_output.outputs.stdout }} > terraform.json
+          cat <<EOF > terraform.json
+          ${{ steps.terraform_output.outputs.stdout }}
+          EOF
           ./gomplate \
             -f templates/networks.t \
             -d networks=networks.json \
