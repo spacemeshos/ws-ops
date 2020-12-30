@@ -21,7 +21,6 @@ jobs:
         with:
           project_id: ${{ secrets.GCP_PROJECT }}
           service_account_key: ${{ secrets.GCP_SA_KEY }}
-          export_default_credentials: true # TODO ???
 
       - uses: google-github-actions/get-gke-credentials@main
         with:
@@ -38,19 +37,19 @@ jobs:
 
       - name: Terraform Plan
         run: terraform plan -input=false
-        #if: github.event_name == 'pull_request'
+        if: github.event_name == 'pull_request'
         id: plan
         continue-on-error: true
 
       - name: Update Pull Request
         uses: actions/github-script@v3
-        #if: github.event_name == 'pull_request'
+        if: github.event_name == 'pull_request'
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
             const output = `#### Terraform Plan 📖\`${{ steps.plan.outcome }}\`
               <details><summary>Show Plan</summary>
-              \`\`\`${process.env.PLAN}\`\`\`
+              \`\`\`${{ steps.plan.outputs.stdout }}\`\`\`
               </details>
               *Pusher: @${{ github.actor }},
               Action: \`${{ github.event_name }}\`*`;
