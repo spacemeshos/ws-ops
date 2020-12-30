@@ -9,19 +9,24 @@ on: [push]
 jobs:
   terraform:
     runs-on: ubuntu-latest
+    env:
+      PAGERDUTY_TOKEN: ${{ secrets.PAGERDUTY_TOKEN }}
     defaults:
       run:
         working-directory: terraform
-    env:
-      PAGERDUTY_TOKEN: ${{ secrets.PAGERDUTY_TOKEN }}
     steps:
       - uses: actions/checkout@v2
+
+      - uses: google-github-actions/setup-gcloud@master
+        with:
+          project_id: ${{ secrets.GCP_PROJECT }}
+          service_account_key: ${{ secrets.GCP_SA_KEY }}
+          export_default_credentials: true # TODO ???
 
       - uses: google-github-actions/get-gke-credentials@main
         with:
           cluster_name: test
           location: europe-west1-b
-          credentials: ${{ secrets.gcp_credentials }}
 
       - uses: hashicorp/setup-terraform@v1
         with:
