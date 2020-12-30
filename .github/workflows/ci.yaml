@@ -27,7 +27,7 @@ jobs:
 
       - run: terraform fmt -check
       - run: terraform init
-      - run: terraform plan
+      - run: terraform plan -no-color
 
 #  deploy:
 #    runs-on: ubuntu-latest
