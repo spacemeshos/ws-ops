@@ -12,6 +12,8 @@ jobs:
     defaults:
       run:
         working-directory: terraform
+    env:
+      PAGERDUTY_TOKEN: ${{ secrets.PAGERDUTY_TOKEN }}
     steps:
       - uses: actions/checkout@v2
 
