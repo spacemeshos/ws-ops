@@ -12,44 +12,10 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: Init gcloud
-        env:
-          CLUSTER_NAME: test
-          CLUSTER_ZONE: europe-west1-b
-          PROJECT_NAME: explore-293719
-        run: |
-          echo "${{ secrets.GCLOUD_KEY }}" | base64 -d > key.json
-          gcloud auth activate-service-account --key-file=key.json
-          gcloud container clusters get-credentials \
-            ${{ env.CLUSTER_NAME }} \
-            --zone ${{ env.CLUSTER_ZONE }} \
-            --project ${{ env.PROJECT_NAME }}
+      - uses: google-github-actions/get-gke-credentials@main
+        with:
+          cluster_name: test
+          location: europe-west1-b
+          credentials: ${{ secrets.gcp_credentials }}
 
-      - name: Terraform apply
-        run: cd terraform && terraform apply -auto-approve
-
-      - name: Terraform save outputs
-        run: cd terraform && terraform output -json > terraform.json
-
-      - name: Get helm list
-        run: helm list -o json > helm-list.json
-
-      - name: Install gomplate
-        run: |
-          curl -sSL -o gomplate https://github.com/hairyhenderson/gomplate/releases/download/v3.8.0/gomplate_linux-amd64
-          chmod +x gomplate
-
-      - name: Download configs
-        run: |
-          ./gomplate \
-            -f templates/download-configs.t \
-            -d networks=networks.json \
-            --exec-pipe -- bash
-
-      - name: Deploy helms
-        run: |
-          ./gomplate \
-            -f templates/networks.t \
-            -d networks=networks.json \
-            -d helms=helm-list.json \
-            --exec-pipe -- bash
+      - run: kubectl cluster-info
