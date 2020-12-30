@@ -26,6 +26,7 @@ jobs:
           cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
 
       - run: terraform fmt -check
+      - run: terraform init
       - run: terraform plan
 
 #  deploy:
