@@ -33,8 +33,34 @@ jobs:
           cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
 
       - run: terraform fmt -check
+
       - run: terraform init
-      - run: terraform plan -input=false
+
+      - name: Terraform Plan
+        run: terraform plan -input=false
+        #if: github.event_name == 'pull_request'
+        id: plan
+        continue-on-error: true
+
+      - name: Update Pull Request
+        uses: actions/github-script@v3
+        #if: github.event_name == 'pull_request'
+        with:
+          github-token: ${{secrets.GITHUB_TOKEN}}
+          script: |
+            const output = `#### Terraform Plan 📖\`${{ steps.plan.outcome }}\`
+              <details><summary>Show Plan</summary>
+              \`\`\`${process.env.PLAN}\`\`\`
+              </details>
+              *Pusher: @${{ github.actor }},
+              Action: \`${{ github.event_name }}\`*`;
+              
+            github.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: output
+            })
 
 #  deploy:
 #    runs-on: ubuntu-latest
