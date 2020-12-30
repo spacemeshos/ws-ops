@@ -1,9 +1,10 @@
 name: Deploy
 
-on:
-  push:
-    branches:
-      - main
+on: [push]
+#on:
+#  push:
+#    branches:
+#      - main
 
 jobs:
   deploy:
@@ -24,6 +25,15 @@ jobs:
             --zone ${{ env.CLUSTER_ZONE }} \
             --project ${{ env.PROJECT_NAME }}
 
+      - name: Terraform apply
+        run: cd terraform && terraform apply -auto-approve
+
+      - name: Terraform save outputs
+        run: cd terraform && terraform output -json > terraform.json
+
+      - name: Get helm list
+        run: helm list -o json > helm-list.json
+
       - name: Install gomplate
         run: |
           curl -sSL -o gomplate https://github.com/hairyhenderson/gomplate/releases/download/v3.8.0/gomplate_linux-amd64
@@ -35,9 +45,6 @@ jobs:
             -f templates/download-configs.t \
             -d networks=networks.json \
             --exec-pipe -- bash
-
-      - name: Get helm list
-        run: helm list -o json > helm-list.json
 
       - name: Deploy helms
         run: |
