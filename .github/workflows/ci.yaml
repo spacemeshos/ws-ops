@@ -14,6 +14,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       PAGERDUTY_TOKEN: ${{ secrets.PAGERDUTY_TOKEN }}
+      STATUSPAGE_TOKEN: ${{ secrets.STATUSPAGE_TOKEN }}
     steps:
       - uses: actions/checkout@v2
 
