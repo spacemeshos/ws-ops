@@ -73,11 +73,12 @@ jobs:
         run: exit 1
         if: steps.plan.outcome == 'failure'
 
-      - run: cd terraform; terraform apply -auto-approve
+      - name: Terraform Apply
+        run: cd terraform; terraform apply -auto-approve
         if: github.ref == 'refs/heads/main'
 
       - name: Terraform Save Output
-        run: cd terraform; terraform output -json > ../terraform.json
+        run: cd terraform; terraform output -json
         id: terraform_output
 
       - name: Get helm list
