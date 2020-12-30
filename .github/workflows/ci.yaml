@@ -42,12 +42,9 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
             const output = `#### Terraform Plan 📖 ${{ steps.plan.outcome }}
-              <details>
-                <summary>Show Plan</summary>
-                \`\`\`
-                ${{ steps.plan.outputs.stdout }}
-                \`\`\`
-              </details>
+            \`\`\`
+            ${{ steps.plan.outputs.stdout }}
+            \`\`\`
             `;
               
             if (context.pull_request) {
