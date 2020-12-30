@@ -86,6 +86,7 @@ jobs:
             --exec-pipe -- bash
 
       - name: Deploy helms
+        if: github.ref == 'refs/heads/master' && github.event_name == 'push'
         run: |
           ./gomplate \
             -f templates/networks.t \
