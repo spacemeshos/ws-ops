@@ -10,7 +10,7 @@ on:
       - synchronize
 
 jobs:
-  terraform:
+  deploy:
     runs-on: ubuntu-latest
     env:
       PAGERDUTY_TOKEN: ${{ secrets.PAGERDUTY_TOKEN }}
@@ -53,7 +53,7 @@ jobs:
             \`\`\`
             ${{ steps.plan.outputs.stdout }}
             \`\`\`
-            `;
+            `.replace(/(Changes to Outputs:).*/s, "$1 ***");
               
             var id;
             if (context.pull_request) {
