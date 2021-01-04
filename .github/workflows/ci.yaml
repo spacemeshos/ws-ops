@@ -53,7 +53,7 @@ jobs:
             \`\`\`
             ${{ steps.plan.outputs.stdout }}
             \`\`\`
-            `;
+            `.replace(/(Changes to Outputs:).*/s, "$1 ***");
               
             var id;
             if (context.pull_request) {
