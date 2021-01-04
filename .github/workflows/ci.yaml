@@ -10,7 +10,7 @@ on:
       - synchronize
 
 jobs:
-  terraform:
+  deploy:
     runs-on: ubuntu-latest
     env:
       PAGERDUTY_TOKEN: ${{ secrets.PAGERDUTY_TOKEN }}
