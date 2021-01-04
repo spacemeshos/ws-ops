@@ -1,26 +1,5 @@
 [
   {
-    "netName": "devnet 20",
-    "netID" : "20",
-    "conf": "https://discover.spacemesh.io/conf/20/config.json",
-    "peers": "https://discover.spacemesh.io/conf/20/peers.json",
-    "grpcAPI": "https://api-20.spacemesh.io/",
-    "jsonAPI": "https://api-json-20.spacemesh.io/",
-    "explorer" : "https://explorer-20.spacemesh.io/",
-    "explorerAPI" : "https://explorer-api-20.spacemesh.io/",
-    "explorerVersion": "0.0.2",
-    "explorerConf": "https://discover.spacemesh.io/conf/20/explorer-config.json",
-    "dash" : "https://dash-20.spacemesh.io/",
-    "dashAPI" : "wss://dash-api-20.spacemesh.io/ws",
-    "dashVersion": "0.0.2",
-    "minNodeVersion" : "0.1.17",
-    "maxNodeVersion" : "0.1.17",
-    "minSmappRelease": "0.1.12",
-    "latestSmappRelease" : "0.1.13",
-    "smappBaseDownloadUrl" : "https://downloads.spacemesh.io",
-    "nodeBaseDownloadUrl" : "https://downloads.spacemesh.io"
-  },
-  {
     "netName": "devnet 21",
     "netID" : "21",
     "conf": "https://discover.spacemesh.io/conf/21/config.json",
