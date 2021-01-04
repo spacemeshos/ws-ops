@@ -19,5 +19,26 @@
     "latestSmappRelease" : "0.1.13",
     "smappBaseDownloadUrl" : "https://downloads.spacemesh.io",
     "nodeBaseDownloadUrl" : "https://downloads.spacemesh.io"
+  },
+  {
+    "netName": "devnet 21",
+    "netID" : "21",
+    "conf": "https://discover.spacemesh.io/conf/21/config.json",
+    "peers": "https://discover.spacemesh.io/conf/21/peers.json",
+    "grpcAPI": "https://api-21.spacemesh.io/",
+    "jsonAPI": "https://api-json-21.spacemesh.io/",
+    "explorer" : "https://explorer-21.spacemesh.io/",
+    "explorerAPI" : "https://explorer-api-21.spacemesh.io/",
+    "explorerVersion": "0.0.2",
+    "explorerConf": "https://discover.spacemesh.io/conf/21/explorer-config.json",
+    "dash" : "https://dash-21.spacemesh.io/",
+    "dashAPI" : "wss://dash-api-21.spacemesh.io/ws",
+    "dashVersion": "0.0.2",
+    "minNodeVersion" : "0.1.17",
+    "maxNodeVersion" : "0.1.17",
+    "minSmappRelease": "0.1.12",
+    "latestSmappRelease" : "0.1.13",
+    "smappBaseDownloadUrl" : "https://downloads.spacemesh.io",
+    "nodeBaseDownloadUrl" : "https://downloads.spacemesh.io"
   }
 ]
