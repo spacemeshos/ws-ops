@@ -1,5 +1,7 @@
 locals {
-  networks = jsondecode(file("${path.module}/../networks.json"))
+  networks = {
+    for net in jsondecode(file("${path.module}/../networks.json")) : net.netID => net
+  }
 }
 
 variable "domain" {

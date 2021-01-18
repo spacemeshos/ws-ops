@@ -16,8 +16,8 @@ resource "pagerduty_escalation_policy" "main" {
 }
 
 resource "pagerduty_service" "api" {
-  count                   = length(local.networks)
-  name                    = "api-${local.networks[count.index].netID}"
+  for_each                = local.networks
+  name                    = "api-${each.key}"
   escalation_policy       = pagerduty_escalation_policy.main.id
   acknowledgement_timeout = "null"
   auto_resolve_timeout    = "null"
@@ -25,8 +25,8 @@ resource "pagerduty_service" "api" {
 }
 
 resource "pagerduty_service" "explorer" {
-  count                   = length(local.networks)
-  name                    = "explorer-${local.networks[count.index].netID}"
+  for_each                = local.networks
+  name                    = "explorer-${each.key}"
   escalation_policy       = pagerduty_escalation_policy.main.id
   acknowledgement_timeout = "null"
   auto_resolve_timeout    = "null"
@@ -34,8 +34,8 @@ resource "pagerduty_service" "explorer" {
 }
 
 resource "pagerduty_service" "dash" {
-  count                   = length(local.networks)
-  name                    = "dash-${local.networks[count.index].netID}"
+  for_each                = local.networks
+  name                    = "dash-${each.key}"
   escalation_policy       = pagerduty_escalation_policy.main.id
   acknowledgement_timeout = "null"
   auto_resolve_timeout    = "null"
@@ -43,22 +43,22 @@ resource "pagerduty_service" "dash" {
 }
 
 resource "pagerduty_service_integration" "api" {
-  count   = length(local.networks)
-  name    = "api-${local.networks[count.index].netID}"
-  type    = "events_api_v2_inbound_integration"
-  service = pagerduty_service.api[count.index].id
+  for_each = local.networks
+  name     = "api-${each.key}"
+  type     = "events_api_v2_inbound_integration"
+  service  = pagerduty_service.api[each.key].id
 }
 
 resource "pagerduty_service_integration" "explorer" {
-  count   = length(local.networks)
-  name    = "explorer-${local.networks[count.index].netID}"
-  type    = "events_api_v2_inbound_integration"
-  service = pagerduty_service.explorer[count.index].id
+  for_each = local.networks
+  name     = "explorer-${local.networks[each.key].netID}"
+  type     = "events_api_v2_inbound_integration"
+  service  = pagerduty_service.explorer[each.key].id
 }
 
 resource "pagerduty_service_integration" "dash" {
-  count   = length(local.networks)
-  name    = "dash-${local.networks[count.index].netID}"
-  type    = "events_api_v2_inbound_integration"
-  service = pagerduty_service.dash[count.index].id
+  for_each = local.networks
+  name     = "dash-${local.networks[each.key].netID}"
+  type     = "events_api_v2_inbound_integration"
+  service  = pagerduty_service.dash[each.key].id
 }
