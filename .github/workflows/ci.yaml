@@ -15,6 +15,7 @@ jobs:
     env:
       PAGERDUTY_TOKEN: ${{ secrets.PAGERDUTY_TOKEN }}
       STATUSPAGE_TOKEN: ${{ secrets.STATUSPAGE_TOKEN }}
+      CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
     steps:
       - uses: actions/checkout@v2
 
