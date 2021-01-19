@@ -29,7 +29,8 @@ jobs:
           cluster_name: test
           location: europe-west1-b
 
-      - run: find ~ -type f
+      - run: ls -l $KUBECONFIG
+      - run: cat $KUBECONFIG
 
       - uses: hashicorp/setup-terraform@v1
         with:
