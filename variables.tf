@@ -1,6 +1,6 @@
 locals {
   networks = {
-    for net in jsondecode(file("${path.module}/../networks.json")) :
+    for net in jsondecode(file("${path.module}/networks.json")) :
     net.netID => net
   }
 }

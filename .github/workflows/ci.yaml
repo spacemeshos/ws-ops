@@ -34,13 +34,13 @@ jobs:
           cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
 
       - name: Terraform Fmt
-        run: cd terraform; terraform fmt -check
+        run: terraform fmt -check
 
       - name: Terraform Init
-        run: cd terraform; terraform init
+        run: terraform init
 
       - name: Terraform Plan
-        run: cd terraform; terraform plan -input=false -no-color
+        run: terraform plan -input=false -no-color
         id: plan
         continue-on-error: true
 
@@ -75,37 +75,5 @@ jobs:
         if: steps.plan.outcome == 'failure'
 
       - name: Terraform Apply
-        run: cd terraform; terraform apply -auto-approve
+        run: terraform apply -auto-approve
         if: github.ref == 'refs/heads/main'
-
-      - name: Terraform Save Output
-        run: cd terraform; terraform output -json
-        id: terraform_output
-
-      - name: Get helm list
-        run: helm list -o json > helm-list.json
-
-      - name: Install gomplate
-        run: |
-          curl -sSL -o gomplate https://github.com/hairyhenderson/gomplate/releases/download/v3.8.0/gomplate_linux-amd64
-          chmod +x gomplate
-
-      - name: Download configs
-        run: |
-          ./gomplate \
-            -f templates/download-configs.t \
-            -d networks=networks.json \
-            --exec-pipe -- bash
-
-      - name: Deploy helms
-        if: github.ref == 'refs/heads/main'
-        run: |
-          cat <<EOF > terraform.json
-          ${{ steps.terraform_output.outputs.stdout }}
-          EOF
-          ./gomplate \
-            -f templates/networks.t \
-            -d networks=networks.json \
-            -d helms=helm-list.json \
-            -d terraform=terraform.json \
-            --exec-pipe -- bash
