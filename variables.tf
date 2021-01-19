@@ -16,3 +16,7 @@ variable "helm_repository" {
 variable "statuspage_id" {
   type = string
 }
+
+variable "kube_config" {
+  default = "~/.kube/config"
+}

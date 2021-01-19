@@ -29,9 +29,6 @@ jobs:
           cluster_name: test
           location: europe-west1-b
 
-      - run: ls -l $KUBECONFIG
-      - run: cat $KUBECONFIG
-
       - uses: hashicorp/setup-terraform@v1
         with:
           cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
@@ -45,6 +42,8 @@ jobs:
       - name: Terraform Plan
         run: terraform plan -input=false -no-color
         id: plan
+        env:
+          TF_VAR_KUBE_CONFIG: ${{ env.KUBECONFIG }}
         continue-on-error: true
 
       - name: Update Pull Request
@@ -80,3 +79,5 @@ jobs:
       - name: Terraform Apply
         run: terraform apply -auto-approve
         if: github.ref == 'refs/heads/main'
+        env:
+          TF_VAR_KUBE_CONFIG: ${{ env.KUBECONFIG }}
