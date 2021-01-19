@@ -2,10 +2,10 @@ provider "google" {
   project = "explore-293719"
 }
 
-provider "pagerduty" {
-}
-
-provider "statuspage" {
+provider "helm" {
+  kubernetes {
+    config_path = var.kube_config
+  }
 }
 
 terraform {
