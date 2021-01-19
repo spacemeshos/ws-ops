@@ -19,6 +19,7 @@ resource "helm_release" "api" {
   name       = "spacemesh-api-${each.key}"
   repository = var.helm_repository
   chart      = "spacemesh-api"
+  lint       = true
 
   set {
     name  = "netID"
@@ -55,15 +56,13 @@ resource "helm_release" "api" {
     value = pagerduty_service_integration.api[each.key].integration_key
   }
 
-  set {
-    name  = "config"
-    value = data.http.config[each.key].body
-  }
-
-  set {
-    name  = "peers"
-    value = data.http.peers[each.key].body
-  }
+  values = [<<EOF
+config: |
+  ${indent(2, data.http.config[each.key].body)}
+peers: |
+  ${indent(2, data.http.peers[each.key].body)}
+EOF
+  ]
 }
 
 resource "helm_release" "explorer" {
@@ -71,6 +70,7 @@ resource "helm_release" "explorer" {
   name       = "spacemesh-explorer-${each.key}"
   repository = var.helm_repository
   chart      = "spacemesh-explorer"
+  lint       = true
 
   set {
     name  = "imageTag"
@@ -112,15 +112,14 @@ resource "helm_release" "explorer" {
     value = each.key
   }
 
-  set {
-    name  = "node.config"
-    value = data.http.config[each.key].body
-  }
-
-  set {
-    name  = "node.peers"
-    value = data.http.peers[each.key].body
-  }
+  values = [<<EOF
+node:
+  config: |
+    ${indent(4, data.http.config[each.key].body)}
+  peers: |
+    ${indent(4, data.http.peers[each.key].body)}
+EOF
+  ]
 }
 
 resource "helm_release" "dash" {
@@ -128,6 +127,7 @@ resource "helm_release" "dash" {
   name       = "spacemesh-dash-${each.key}"
   repository = var.helm_repository
   chart      = "spacemesh-dash"
+  lint       = true
 
   set {
     name  = "image.tag"
