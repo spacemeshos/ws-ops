@@ -18,3 +18,9 @@ resource "statuspage_component" "dash" {
   name     = "Spacemesh ${local.networks[each.key].netName} Dashboard"
   status   = "operational"
 }
+
+resource "statuspage_component" "discover" {
+  page_id = var.statuspage_id
+  name    = "Spacemesh Discover Service"
+  status  = "operational"
+}
