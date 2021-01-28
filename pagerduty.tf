@@ -42,6 +42,14 @@ resource "pagerduty_service" "dash" {
   alert_creation          = "create_alerts_and_incidents"
 }
 
+resource "pagerduty_service" "discover" {
+  name                    = "discover"
+  escalation_policy       = pagerduty_escalation_policy.main.id
+  acknowledgement_timeout = "null"
+  auto_resolve_timeout    = "null"
+  alert_creation          = "create_alerts_and_incidents"
+}
+
 resource "pagerduty_service_integration" "api" {
   for_each = local.networks
   name     = "api-${each.key}"
@@ -61,4 +69,10 @@ resource "pagerduty_service_integration" "dash" {
   name     = "dash-${local.networks[each.key].netID}"
   type     = "events_api_v2_inbound_integration"
   service  = pagerduty_service.dash[each.key].id
+}
+
+resource "pagerduty_service_integration" "discover" {
+  name     = "discover"
+  type     = "events_api_v2_inbound_integration"
+  service  = pagerduty_service.discover.id
 }
