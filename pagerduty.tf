@@ -72,7 +72,7 @@ resource "pagerduty_service_integration" "dash" {
 }
 
 resource "pagerduty_service_integration" "discover" {
-  name     = "discover"
-  type     = "events_api_v2_inbound_integration"
-  service  = pagerduty_service.discover.id
+  name    = "discover"
+  type    = "events_api_v2_inbound_integration"
+  service = pagerduty_service.discover.id
 }

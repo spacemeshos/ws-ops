@@ -20,7 +20,7 @@ resource "statuspage_component" "dash" {
 }
 
 resource "statuspage_component" "discover" {
-  page_id  = var.statuspage_id
-  name     = "Spacemesh Discover Service"
-  status   = "operational"
+  page_id = var.statuspage_id
+  name    = "Spacemesh Discover Service"
+  status  = "operational"
 }
