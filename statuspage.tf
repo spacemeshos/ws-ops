@@ -21,6 +21,6 @@ resource "statuspage_component" "dash" {
 
 resource "statuspage_component" "discover" {
   page_id = var.statuspage_id
-  name    = "Spacemesh Discover Service"
+  name    = "Spacemesh Discovery Service"
   status  = "operational"
 }
