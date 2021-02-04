@@ -10,7 +10,7 @@ terraform {
     }
     google = {
       source  = "hashicorp/google"
-      version = "~> 3.51.0"
+      version = "~> 3.55.0"
     }
     cloudflare = {
       source  = "cloudflare/cloudflare"

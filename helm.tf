@@ -1,17 +1,16 @@
-data "http" "config" {
+data "local_file" "config" {
   for_each = local.networks
-  url      = "https://discover.spacemesh.io/conf/${each.key}/config.json"
-  request_headers = {
-    Accept = "application/json"
-  }
+  filename = "${path.module}/conf/${each.key}/config.json"
 }
 
-data "http" "peers" {
+data "local_file" "explorer_config" {
   for_each = local.networks
-  url      = "https://discover.spacemesh.io/conf/${each.key}/peers.json"
-  request_headers = {
-    Accept = "application/json"
-  }
+  filename = "${path.module}/conf/${each.key}/explorer-config.json"
+}
+
+data "local_file" "peers" {
+  for_each = local.networks
+  filename = "${path.module}/conf/${each.key}/peers.json"
 }
 
 resource "helm_release" "api" {
@@ -58,9 +57,9 @@ resource "helm_release" "api" {
 
   values = [<<EOF
 config: |
-  ${indent(2, data.http.config[each.key].body)}
+  ${indent(2, data.local_file.config[each.key].content)}
 peers: |
-  ${indent(2, data.http.peers[each.key].body)}
+  ${indent(2, data.local_file.peers[each.key].content)}
 EOF
   ]
 }
@@ -115,9 +114,9 @@ resource "helm_release" "explorer" {
   values = [<<EOF
 node:
   config: |
-    ${indent(4, data.http.config[each.key].body)}
+    ${indent(4, data.local_file.explorer_config[each.key].content)}
   peers: |
-    ${indent(4, data.http.peers[each.key].body)}
+    ${indent(4, data.local_file.peers[each.key].content)}
 EOF
   ]
 }
