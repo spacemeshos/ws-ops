@@ -53,12 +53,6 @@ jobs:
           name: terraform-plan
           path: plan.txt
 
-      - name: Add comment
-        uses: peter-evans/create-or-update-comment@v1
-        with:
-          body: |
-            #### Terraform Plan 📖 ${{ steps.plan.outcome }}
-
       - name: Terraform Plan Status
         run: exit 1
         if: steps.plan.outcome == 'failure'
