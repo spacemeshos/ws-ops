@@ -41,37 +41,17 @@ jobs:
         run: terraform init
 
       - name: Terraform Plan
-        run: terraform plan -input=false -no-color
+        run: terraform plan -input=false -no-color > plan.txt
         id: plan
         env:
           TF_VAR_kube_config: ${{ env.KUBECONFIG }}
         continue-on-error: true
 
-      - name: Update Pull Request
-        uses: actions/github-script@v3
+      - name: Save plan as artifact
+        uses: actions/upload-artifact@v2
         with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          script: |
-            const output = `#### Terraform Plan 📖 ${{ steps.plan.outcome }}
-            \`\`\`
-            ${{ steps.plan.outputs.stdout }}
-            \`\`\`
-            `.replace(/(Changes to Outputs:).*/s, "$1 ***");
-              
-            var id;
-            if (context.pull_request) {
-              id = context.pull_request.number;
-            } else if (context.payload.pull_request) {
-              id = context.payload.pull_request.number;
-            }
-            if (id) {
-              github.issues.createComment({
-                issue_number: id,
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                body: output
-              });
-            }
+          name: terraform-plan
+          path: plan.txt
 
       - name: Terraform Plan Status
         run: exit 1
