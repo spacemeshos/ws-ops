@@ -41,20 +41,23 @@ jobs:
         run: terraform init
 
       - name: Terraform Plan
-        run: terraform plan -input=false -no-color
+        run: terraform plan -input=false -no-color > plan.txt
         id: plan
         env:
           TF_VAR_kube_config: ${{ env.KUBECONFIG }}
         continue-on-error: true
 
-      - name: Create comment
+      - name: Save plan as artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: terraform-plan
+          path: plan.txt
+
+      - name: Add comment
         uses: peter-evans/create-or-update-comment@v1
         with:
           body: |
             #### Terraform Plan 📖 ${{ steps.plan.outcome }}
-            ```
-            ${{ steps.plan.outputs.stdout }}
-            ```
 
       - name: Terraform Plan Status
         run: exit 1
