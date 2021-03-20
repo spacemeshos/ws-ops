@@ -70,8 +70,22 @@ resource "google_compute_url_map" "main" {
 
   host_rule {
     hosts = [
+      "explorer.spacemesh.io"
+    ]
+    path_matcher = "explorer"
+  }
+
+  host_rule {
+    hosts = [
       for network in local.networks :
       "dash-${network.netID}.spacemesh.io"
+    ]
+    path_matcher = "dash"
+  }
+
+  host_rule {
+    hosts = [
+      "dash.spacemesh.io"
     ]
     path_matcher = "dash"
   }
