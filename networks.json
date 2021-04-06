@@ -8,7 +8,7 @@
     "jsonAPI": "https://api-json-127.spacemesh.io/",
     "explorer" : "https://explorer-127.spacemesh.io/",
     "explorerAPI" : "https://explorer-api-127.spacemesh.io/",
-    "explorerVersion": "0.0.4",
+    "explorerVersion": "0.0.5",
     "explorerConf": "https://discover.spacemesh.io/conf/127/explorer-config.json",
     "dash" : "https://dash-127.spacemesh.io/",
     "dashAPI" : "wss://dash-api-127.spacemesh.io/ws",
