@@ -70,6 +70,7 @@ resource "helm_release" "explorer" {
   repository = var.helm_repository
   chart      = "spacemesh-explorer"
   lint       = true
+  timeout    = 900
 
   set {
     name  = "imageTag"
