@@ -19,6 +19,7 @@ resource "helm_release" "api" {
   repository = var.helm_repository
   chart      = "spacemesh-api"
   lint       = true
+  wait       = false
 
   set {
     name  = "netID"
@@ -70,7 +71,7 @@ resource "helm_release" "explorer" {
   repository = var.helm_repository
   chart      = "spacemesh-explorer"
   lint       = true
-  timeout    = 900
+  wait       = false
 
   set {
     name  = "imageTag"
