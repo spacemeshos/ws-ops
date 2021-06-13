@@ -1,6 +1,6 @@
 {
 	"api": {
-		"grpc": "node,mesh,globalstate,transaction"
+		"grpc": "node,mesh,globalstate,transaction,smesher"
 	},
 	"hare": {
 		"hare-committee-size": 60,
