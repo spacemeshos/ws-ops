@@ -17,6 +17,9 @@ like this:
 
 - The `GCLOUD_KEY` to access Google Cloud is stored in repository Secrets.
   gcloud is setting up with this key.
+- `CLOUDFLARE_API_TOKEN` 
+- `STATUSPAGE_TOKEN` 
+- `PAGERDUTY_TOKEN`
 - The config files are downloaded by running
   [templates/download-configs.t](templates/download-configs.t).
 - The helms that were installed on cluster are downloaded to helm-list.json
@@ -24,6 +27,13 @@ like this:
   files for each helm and runs the upgrade (install, if helm not installed).
   If a network exists on the cluster, but is not present in `networks.json` -
   uninstall helms belonging to this network.
+
+To run terraform locally you need following variables:
+
+- `CLOUDFLARE_API_TOKEN`
+- `STATUSPAGE_TOKEN`
+- `PAGERDUTY_TOKEN`
+- `GOOGLE_APPLICATION_CREDENTIALS` - path to Google service account
 
 ## Discovery service
 
