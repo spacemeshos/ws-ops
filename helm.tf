@@ -33,7 +33,7 @@ resource "helm_release" "api" {
 
   set {
     name  = "image.tag"
-    value = "v${local.networks[each.key].maxNodeVersion}"
+    value = local.networks[each.key].maxNodeVersion
   }
 
   set {
@@ -115,7 +115,7 @@ resource "helm_release" "explorer" {
 
   set {
     name  = "node.image.tag"
-    value = "v${local.networks[each.key].maxNodeVersion}"
+    value = local.networks[each.key].maxNodeVersion
   }
 
   set {
