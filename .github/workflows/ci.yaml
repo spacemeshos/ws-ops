@@ -41,7 +41,7 @@ jobs:
         run: terraform init
 
       - name: Terraform Plan
-        run: terraform plan -input=false -no-color > plan.txt
+        run: terraform state rm 'statuspage_component.dash["20"]' && terraform plan -input=false -no-color > plan.txt
         id: plan
         env:
           TF_VAR_kube_config: ${{ env.KUBECONFIG }}
