@@ -28,7 +28,7 @@ resource "helm_release" "api" {
 
   set {
     name  = "image.repository"
-    value = "v${local.networks[each.key].repository}"
+    value = local.networks[each.key].repository
   }
 
   set {
@@ -106,6 +106,11 @@ resource "helm_release" "explorer" {
   set {
     name  = "node.resources.requests.memory"
     value = "4Gi"
+  }
+
+  set {
+    name  = "node.image.repository"
+    value = local.networks[each.key].repository
   }
 
   set {
