@@ -27,6 +27,11 @@ resource "helm_release" "api" {
   }
 
   set {
+    name  = "image.repository"
+    value = "v${local.networks[each.key].repository}"
+  }
+
+  set {
     name  = "image.tag"
     value = "v${local.networks[each.key].maxNodeVersion}"
   }
