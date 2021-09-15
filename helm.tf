@@ -109,11 +109,6 @@ resource "helm_release" "explorer" {
   }
 
   set {
-    name  = "node.image.repository"
-    value = "${local.networks[each.key].repository}"
-  }
-
-  set {
     name  = "node.image.tag"
     value = "v${local.networks[each.key].maxNodeVersion}"
   }
