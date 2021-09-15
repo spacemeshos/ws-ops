@@ -1,24 +1,2 @@
 [
-  {
-    "netName": "devnet 204",
-    "netID" : "204",
-    "conf": "https://discover.spacemesh.io/conf/204/config.json",
-    "peers": "https://discover.spacemesh.io/conf/204/peers.json",
-    "grpcAPI": "https://api-204.spacemesh.io/",
-    "jsonAPI": "https://api-json-204.spacemesh.io/",
-    "explorer" : "https://explorer-204.spacemesh.io/",
-    "explorerAPI" : "https://explorer-api-204.spacemesh.io/",
-    "explorerVersion": "0.0.9",
-    "explorerConf": "https://discover.spacemesh.io/conf/204/explorer-config.json",
-    "dash" : "https://dash-204.spacemesh.io/",
-    "dashAPI" : "wss://dash-api-204.spacemesh.io/ws",
-    "dashVersion": "0.0.2",
-    "repository": "spacemeshos/go-spacemesh-dev",
-    "minNodeVersion" : "03a90cc",
-    "maxNodeVersion" : "03a90cc",
-    "minSmappRelease": "0.1.25",
-    "latestSmappRelease" : "0.1.25",
-    "smappBaseDownloadUrl" : "https://downloads.spacemesh.io",
-    "nodeBaseDownloadUrl" : "https://downloads.spacemesh.io"
-  }
 ]
