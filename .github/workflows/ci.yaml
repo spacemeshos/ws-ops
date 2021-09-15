@@ -47,9 +47,6 @@ jobs:
           TF_VAR_kube_config: ${{ env.KUBECONFIG }}
         continue-on-error: true
 
-      - name: Terraform State
-        run: terraform state rm 'statuspage_component.explorer["20"]' && terraform state rm 'statuspage_component.api["20"]'
-
       - name: Save plan as artifact
         uses: actions/upload-artifact@v2
         with:
