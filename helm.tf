@@ -20,6 +20,7 @@ resource "helm_release" "api" {
   chart      = "spacemesh-api"
   lint       = true
   wait       = false
+  version    = "1.0.1"
 
   set {
     name  = "netID"
@@ -77,6 +78,7 @@ resource "helm_release" "explorer" {
   chart      = "spacemesh-explorer"
   lint       = true
   wait       = false
+  version    = "1.0.3"
 
   set {
     name  = "imageTag"
@@ -139,6 +141,7 @@ resource "helm_release" "dash" {
   repository = var.helm_repository
   chart      = "spacemesh-dash"
   lint       = true
+  version    = "1.0.0"
 
   set {
     name  = "image.tag"
