@@ -52,12 +52,12 @@
 		"atxs-per-block": 25,
 		"block-cache-size": 20,
 		"genesis-active-size": 50,
-		"genesis-time": "2021-09-13T22:19:40+05:30",
+		"genesis-time": "2021-10-05T18:04:50+05:30",
 		"hdist": 10,
 		"layer-average-size": 30,
 		"layer-duration-sec": 200,
 		"layers-per-epoch": 6,
-		"poet-server": "35.225.173.28:30798",
+		"poet-server": "34.135.188.171:30252",
 		"space-to-commit": 1048576,
 		"sync-interval": 10,
 		"sync-request-timeout": 60000,
@@ -71,19 +71,19 @@
 		"max-inbound": 32,
 		"max-pending-connections": 100,
 		"msg-size-limit": 0,
-		"network-id": 204,
+		"network-id": 207,
 		"outbound-target": 10,
 		"response-timeout": "60s",
 		"session-timeout": "15s",
 		"swarm": {
 			"alpha": 3,
 			"bootnodes": [
-				"spacemesh://6cEwFwdgy9yhvYdPF8BbYSSa7yZe9KVPgZyt5kFtiMVQ@34.133.213.174:5002",
-				"spacemesh://GHxvP8PVkwhF7pDX157BV3AqmhHrCVuz8HzDKrEkHWee@34.133.119.5:5003",
-				"spacemesh://FQnkcjNmrxVybco7PbVP9Rcqhms1Mkvv3XT6RbUgTVj8@35.184.220.42:5004",
-				"spacemesh://FnKXuJHwtW9xeGFv2uva5HfYztDLERnb3iYWPpL5XGsR@34.72.188.184:5007",
-				"spacemesh://7pS7Aq4AkM2nsNy38SiE9mmqtPzY3BLAC3FXh8oLQett@34.68.10.9:5005",
-				"spacemesh://CAgU4Xx9wufy51Kdw5uQ59WUXDknyb33KYdrB4kRD2Ku@35.224.15.22:5006"
+				"spacemesh://6zuk4rDyxh5HxtoxQKpwWJDaN7kRvz6sffT8wZswX9fV@35.202.168.155:5006",
+				"spacemesh://ENr3smk8G4g4epqVJ2sev1dxXPLusPRdhLosEe1S5JU6@34.70.185.93:5002",
+				"spacemesh://GGDtt2wqwkgYQF2Z6f8qd3uFKUhh6YR4tFQuEXp8WCZh@34.67.1.197:5004",
+				"spacemesh://Gq66j8RQsR4a1yCKbzoeBDZKgcRgZkdfqnrbFFaLPMko@34.135.182.170:5003",
+				"spacemesh://8gsBnB9HNaTXXGqRus9dxs7n986T5U42QTYxD7Yc8A8q@104.154.165.68:5005",
+				"spacemesh://4vXLwXXCcRGSVJrXiCBDtemHbtwrQLgndH2bLRQ128EZ@34.72.29.211:5007"
 			],
 			"bootstrap": true,
 			"bucketsize": 20,
@@ -116,16 +116,15 @@
 		"refresh-ntp-interval": "30m"
 	},
 	"tortoise-beacon": {
-		"tortoise-beacon-first-voting-round-duration": "60s",
+		"tortoise-beacon-first-voting-round-duration": "3m",
 		"tortoise-beacon-grace-period-duration": "10s",
-		"tortoise-beacon-kappa": 400000,
+		"tortoise-beacon-kappa": 40,
 		"tortoise-beacon-proposal-duration": "30s",
 		"tortoise-beacon-q": "1/3",
 		"tortoise-beacon-rounds-number": 6,
-		"tortoise-beacon-theta": "1/25000",
+		"tortoise-beacon-theta": "1/4",
 		"tortoise-beacon-votes-limit": 100,
 		"tortoise-beacon-voting-round-duration": "50s",
-		"tortoise-beacon-wait-after-epoch-start": "50s",
 		"tortoise-beacon-weak-coin-round-duration": "10s"
 	}
 }
